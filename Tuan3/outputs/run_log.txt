@@ -1,0 +1,160 @@
+
+==============================================================================
+BUOC 1 | BUSINESS UNDERSTANDING - HIEU BAI TOAN
+==============================================================================
+
+Muc tieu nghiep vu : Uoc luong gia ban (SalePrice) cua mot can nha o Ames, Iowa
+                     dua tren 79 dac trung mo ta chat luong va so luong cac hang
+                     muc vat ly cua bat dong san.
+Muc tieu ky thuat  : Bai toan hoc co giam sat - HOI QUY (supervised regression).
+Do do thanh cong   : RMSE tren log(SalePrice) - dung dung tieu chi cham cua
+                     Kaggle. Lay log vi sai so 10% tren can nha 500k$ va tren
+                     can nha 100k$ phai duoc coi la nghiem trong nhu nhau.
+Rang buoc du lieu  : Theo De Cock (2011) - loai cac can > 4000 sqft (5 quan sat
+                     bat thuong, trong do 3 la "Partial sale" khong phan anh gia
+                     thi truong).
+
+
+==============================================================================
+BUOC 2 | DATA UNDERSTANDING - KHAM PHA DU LIEU (EDA)
+==============================================================================
+Kich thuoc train : 1460 dong x 81 cot
+Kich thuoc test  : 1459 dong x 80 cot
+So cot dinh luong: 38 | So cot dinh tinh: 43
+
+[2.1] Bien muc tieu SalePrice:
+      min=34,900  max=755,000  mean=180,921  median=163,000
+      do lech (skewness) = 1.883  ->  lech phai manh -> CAN log-transform
+      skewness sau log1p = 0.121
+
+[2.2] Top 15 cot thieu du lieu nhieu nhat:
+              so_dong_thieu  ty_le_%
+PoolQC                 1453    99.52
+MiscFeature            1406    96.30
+Alley                  1369    93.77
+Fence                  1179    80.75
+MasVnrType              872    59.73
+FireplaceQu             690    47.26
+LotFrontage             259    17.74
+GarageType               81     5.55
+GarageYrBlt              81     5.55
+GarageFinish             81     5.55
+GarageQual               81     5.55
+GarageCond               81     5.55
+BsmtExposure             38     2.60
+BsmtFinType2             38     2.60
+BsmtQual                 37     2.53
+
+[2.3] 10 bien so tuong quan MANH NHAT voi SalePrice:
+OverallQual     0.790982
+GrLivArea       0.708624
+GarageCars      0.640409
+GarageArea      0.623431
+TotalBsmtSF     0.613581
+1stFlrSF        0.605852
+FullBath        0.560664
+TotRmsAbvGrd    0.533723
+YearBuilt       0.522897
+YearRemodAdd    0.507101
+
+      10 bien so tuong quan YEU/AM nhat:
+BsmtFinSF2      -0.011378
+BsmtHalfBath    -0.016844
+MiscVal         -0.021190
+Id              -0.021917
+LowQualFinSF    -0.025606
+YrSold          -0.028923
+OverallCond     -0.077856
+MSSubClass      -0.084284
+EnclosedPorch   -0.128578
+KitchenAbvGr    -0.135907
+
+[2.4] So quan sat co GrLivArea > 4000 sqft (De Cock de nghi loai): 4
+
+==============================================================================
+BUOC 3 | DATA PREPARATION - LAM SACH & TAO DAC TRUNG
+==============================================================================
+[3.1] Loai ngoai lai GrLivArea > 4000: 1460 -> 1456 dong (-4)
+[3.2] Bien muc tieu chuyen sang log1p(SalePrice) (dung tieu chi cham Kaggle)
+[3.3] Gop train+test de xu ly dong nhat: (2915, 79)
+[3.4] Sau xu ly: tong so o con thieu = 0
+[3.5] Ma hoa 19 bien thu tu (Ex>Gd>TA>Fa>Po) thanh so co thu bac
+[3.6] Tao moi 12 dac trung: TotalSF, TotalBath, HouseAge, RemodAge, IsRemodeled, TotalPorchSF, HasPool, Has2ndFloor, HasGarage, HasBsmt, HasFireplace, Qual_x_SF
+[3.7] log1p cho 40 bien so co |skew| > 0.75
+[3.8] Sau one-hot encoding: 230 dac trung
+
+==============================================================================
+BUOC 4 | MODELING - HUAN LUYEN & TINH CHINH SIEU THAM SO
+==============================================================================
+[4.1] GridSearchCV tim alpha toi uu cho Ridge:
+      alpha tot nhat = 10 | RMSE(CV) = 0.11303
+
+[4.2] Danh gia 6 mo hinh bang 5-fold Cross-Validation:
+      Ridge              RMSE = 0.11303 (+/- 0.00910)   [0.1s]
+      Lasso              RMSE = 0.11290 (+/- 0.00837)   [0.5s]
+      ElasticNet         RMSE = 0.11287 (+/- 0.00855)   [0.5s]
+      RandomForest       RMSE = 0.13145 (+/- 0.01338)   [2.1s]
+      GradientBoosting   RMSE = 0.11870 (+/- 0.00899)   [22.3s]
+      XGBoost            RMSE = 0.11725 (+/- 0.00869)   [3.8s]
+
+[4.3] Bang xep hang (RMSE cang nho cang tot):
+         Mo hinh  RMSE_CV  Do lech chuan  Thoi gian (s)
+      ElasticNet 0.112873       0.008548            0.5
+           Lasso 0.112897       0.008373            0.5
+           Ridge 0.113033       0.009098            0.1
+         XGBoost 0.117254       0.008688            3.8
+GradientBoosting 0.118702       0.008987           22.3
+    RandomForest 0.131450       0.013382            2.1
+
+==============================================================================
+BUOC 5 | EVALUATION - DANH GIA MO HINH
+==============================================================================
+[5.1] Mo hinh tot nhat theo CV: ElasticNet (RMSE=0.11287)
+[5.2] Blend 50/50 (ElasticNet + Lasso): RMSE = 0.11320
+      -> GIU MO HINH DON cho ban nop cuoi cung
+
+[5.3] Danh gia tren tap holdout 20% (quy ve dong dola de de dien giai):
+      RMSE (log)          = 0.12077
+      R^2  (log)          = 0.9076
+      MAE  ($)            = 13,681
+      RMSE ($)            = 18,860
+      Bias trung binh ($) = -2,284  (duong = du doan cao hon thuc te)
+      Sai so lon nhat ($) = 79,989
+      Sai so % trung binh = 8.48%
+
+[5.4] Kiem tra thu cong 1 quan sat (Model Check - De Cock 2011):
+      Gia du doan = $181,111 | Gia thuc te = $184,000 | Sai so = $2,889
+
+[5.5] 15 dac trung anh huong manh nhat:
+Functional              0.157046
+GrLivArea               0.130549
+OverallQual             0.111881
+SaleType_New            0.108339
+Neighborhood_Crawfor    0.100397
+Neighborhood_StoneBr    0.090602
+HouseAge                0.084778
+KitchenAbvGr            0.071750
+SaleCondition_Normal    0.061592
+Neighborhood_IDOTRR     0.058611
+Neighborhood_NridgHt    0.054254
+Exterior1st_BrkFace     0.052661
+Neighborhood_BrkSide    0.051533
+CentralAir              0.051203
+MSZoning_FV             0.048381
+
+==============================================================================
+BUOC 6 | DEPLOYMENT - SINH FILE NOP KAGGLE
+==============================================================================
+[6.1] Huan luyen lai ElasticNet tren TOAN BO train
+[6.2] Da ghi outputs\submission.csv (1459 dong)
+[6.3] Kiem tra nhanh ban nop: min=$49,778 max=$879,386 mean=$178,356 | so gia tri am hoac NaN = 0
+  Id     SalePrice
+1461 115112.793164
+1462 156652.955919
+1463 179971.707802
+1464 200173.394766
+1465 201243.285041
+
+==============================================================================
+HOAN TAT - TAT CA KET QUA NAM TRONG THU MUC: outputs
+==============================================================================

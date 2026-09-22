@@ -1,0 +1,30 @@
+[SETUP] Da sinh du lieu gia lap: train=(400, 65), test=(120, 64)
+
+[KET QUA CV TREN DU LIEU GIA LAP]
+         Mo hinh  RMSE_CV  Do lech chuan  Thoi gian (s)
+           Lasso 0.105832       0.012581            0.2
+      ElasticNet 0.106388       0.012600            0.2
+GradientBoosting 0.107760       0.011092            1.1
+           Ridge 0.108757       0.014580            0.0
+    RandomForest 0.190948       0.031040            0.5
+
+[PASS] Pipeline chay tron ven. submission.csv: 120 dong, gia tu $132,575 den $497,563
+[PASS] Sinh du 7 bieu do: ['01_target_distribution.png', '02_missing_values.png', '03_top_correlations.png', '04_outliers_grlivarea.png', '05_residuals.png', '06_model_comparison.png', '07_feature_importance.png']
+
+>>> TAT CA KIEM THU DEU DAT <<<
+
+[SETUP] Da sinh du lieu gia lap: train=(400, 65), test=(120, 64)
+
+[KET QUA CV TREN DU LIEU GIA LAP]
+         Mo hinh  RMSE_CV  Do lech chuan  Thoi gian (s)
+         XGBoost 0.105007       0.011187            2.8
+           Lasso 0.107282       0.010324            0.0
+GradientBoosting 0.107389       0.011288            0.9
+      ElasticNet 0.107804       0.010305            0.0
+           Ridge 0.110820       0.013580            0.0
+    RandomForest 0.184145       0.026723            0.4
+
+[PASS] Pipeline chay tron ven. submission.csv: 120 dong, gia tu $130,540 den $432,694
+[PASS] Sinh du 7 bieu do: ['01_target_distribution.png', '02_missing_values.png', '03_top_correlations.png', '04_outliers_grlivarea.png', '05_residuals.png', '06_model_comparison.png', '07_feature_importance.png']
+
+>>> TAT CA KIEM THU DEU DAT <<<

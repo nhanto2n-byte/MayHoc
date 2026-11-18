@@ -1,0 +1,6 @@
+Kết quả thí nghiệm lưu trong excel:
+https://1drv.ms/x/c/37dad5dc96204f3c/IQCA0MbKOM-JRL4LWtZGwjFZAX9PIsP3Dry2Ky6fUSx0Av0?e=AbLAGT
+
+Ngày 9/11/2026:
+- Phân tích khám phá dữ liệu về giá nhà, tìm hiểu các loại dữ liệu, dữ liệu bị missing, outlier, unknown, lưu kết
+quả vào folder thí nghiệm missing ngày 11/11/2026.

@@ -1,0 +1,15 @@
+numpy
+pandas
+scipy
+matplotlib
+seaborn
+scikit-learn>=1.2
+jupyter
+openpyxl
+# Tùy chọn (công cụ EDA tự động, biểu đồ tương tác, vẽ cây)
+plotly
+graphviz
+ydata-profiling
+dtale
+sweetviz
+autoviz

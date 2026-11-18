@@ -1,0 +1,5 @@
+model,accuracy,precision,recall,f1,roc_auc,f1_macro,balanced_acc
+Animal SVM (tối ưu),1.0,1.0,1.0,1.0,1.0,1.0,1.0
+Digits SVM,0.9917,0.9918,0.9917,0.9917,,,
+Iris SVM,0.9667,0.9697,0.9667,0.9666,,,
+Diabetes SVM (tối ưu),0.6948,0.5778,0.4815,0.5253,0.8167,,

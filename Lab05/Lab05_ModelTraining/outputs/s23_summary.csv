@@ -1,0 +1,6 @@
+model,accuracy,precision,recall,f1,roc_auc
+Mushroom CategoricalNB,0.9532,0.9889,0.9132,0.9495,0.9978
+Mushroom MultinomialNB,0.9532,0.9889,0.9132,0.9495,0.9978
+Mushroom BernoulliNB,0.9394,0.9831,0.8897,0.934,0.9961
+Spam BoW + MultinomialNB,0.9814,0.9416,0.9062,0.9236,0.9824
+Ads GaussianNB,0.88,0.875,0.7778,0.8235,0.9466
